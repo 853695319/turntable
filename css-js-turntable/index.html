@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <title>简单转盘</title>
     <style>
-      body {
+      .flex-center {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -103,6 +103,7 @@
         height: 300px;
         border-radius: 50%;
         background: #fff;
+        overflow: hidden;
       }
       .turntable-wrap .turntable .bg {
         position: absolute;
@@ -208,18 +209,58 @@
         border-color: transparent transparent #b9a046 transparent;
         border-width: 25px 10px 25px 10px;
       }
+
+      .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+      }
+      .btn-default {
+        color: #333;
+        background-color: #fff;
+        border-color: #ccc;
+      }
     </style>
+    <link rel="stylesheet" href="./js/layer-v3.1.1//layer/mobile/need/layer.css">
   </head>
   <body>
-    <div class="turntable-wrap">
-      <div class="light" id="turntable_light"></div>
-      <div class="turntable" id="turntable">
-        <ul class="bg" id="turntable_bg"></ul>
-        <ul class="gift" id="turntable_gift"></ul>
+    <div>
+      <div style="text-align: center;">
+        <button type="button" class="btn btn-default" onclick="switchPrize('五等奖')">五等奖</button>
+        <button type="button" class="btn btn-default" onclick="switchPrize('四等奖')">四等奖</button>
+        <button type="button" class="btn btn-default" onclick="switchPrize('三等奖')">三等奖</button>
+        <button type="button" class="btn btn-default" onclick="switchPrize('二等奖')">二等奖</button>
       </div>
-      <div class="pointer disabled" id="turntable_pointer">点击抽奖</div>
+      <!-- 抽奖转盘 -->
+      <div class="flex-center">
+        <div id="lottery" class="turntable-wrap">
+          <div class="light" id="turntable_light"></div>
+          <div class="turntable" id="turntable">
+            <ul class="bg" id="turntable_bg"></ul>
+            <ul class="gift" id="turntable_gift"></ul>
+          </div>
+          <div class="pointer disabled" id="turntable_pointer">点击抽奖</div>
+        </div>
+      </div>
     </div>
 
+    <script src="./js/layer-v3.1.1/layer/mobile/layer.js"></script>
     <script> 
       // 单例模式，转盘唯一，用对象字面量方式表示
       let turntable = {
@@ -306,6 +347,11 @@
           }
           if (isEnd) {
             console.log('全部奖品已抽取完毕');
+              layer.open({
+                content: '奖品已经全部抽完啦(￣▽￣)"'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+              });
             return;
           }
           
@@ -389,6 +435,47 @@
         { location: 5, type: 2, rate: 10, img: './static/14.jpg', name: '梵高腰部按摩器', },
         { location: 6, type: 2,  img: './static/13.jpg', name: '罗技（Logitech）K845 游戏机械键盘', }
       ];
+      
+      let prize = {
+        '五等奖': [
+          {
+            location: 1, // 位置
+            type: 2, // 中奖
+            rate: 30,
+            img: './static/18.jpg',
+            name: '格力取暖机',
+          },
+          { 
+            location: 2,
+            type: 2, // 未中奖
+            rate: 20,
+            img: './static/17.jpg',
+            name: '布加迪威',
+          },
+          { location: 3, type: 2, rate: 10, img: './static/16.jpg', name: 'TOM尤克里里', },
+          { location: 4, type: 2, rate: 20, img: './static/15.jpg', name: '梵高颈椎按摩', },
+          { location: 5, type: 2, rate: 10, img: './static/14.jpg', name: '梵高腰部按摩器', },
+          { location: 6, type: 2,  img: './static/13.jpg', name: '罗技（Logitech）K845 游戏机械键盘', }
+        ]
+        , '四等奖': [
+          {location: 1, type: 2, img: './static/12.jpg', name: '小米扫地机'}
+          , {location: 2, type: 2, img: './static/11.jpg', name: '迪奥口红套装'}
+          , {location: 3, type: 2, img: './static/10.jpg', name: '小米空气净化器'}
+          , {location: 4, type: 2, img: './static/9.jpg', name: '小米平衡车'}
+          , {location: 5, type: 2, img: './static/8.jpg', name: 'AirPods & 无线充电盒'}
+        ]
+        , '三等奖': [
+          {location: 1, type: 2, img: './static/7.jpg', name: '丹尼尔惠灵顿手表'}
+          , {location: 2, type: 2, img: './static/6.jpg', name: '神仙水套装'}
+          , {location: 3, type: 2, img: './static/5.jpg', name: 'iPad'}
+          , {location: 4, type: 2, img: './static/4.jpg', name: '任天堂SwitchNS掌上游戏机'}
+        ]
+        , '二等奖': [
+          {location: 1, type: 2, img: './static/3.jpg', name: '华为P40手机'}
+          , {location: 2, type: 2, img: './static/2.jpg', name: '华为笔记本电脑'}
+          , {location: 3, type: 2, img: './static/2.jpg', name: '华为笔记本电脑'}
+        ]
+      };
 
       turntable.turntable = document.querySelector('#turntable');
       turntable.light = document.querySelector('#turntable_light');
@@ -397,6 +484,17 @@
       turntable.pointer = document.querySelector('#turntable_pointer');
       turntable.lottery = lottery;
       turntable.init();
+
+      function switchPrize(prizeName)
+      {
+        turntable.lottery = prize[prizeName];
+        turntable.turntable.style = null;
+        turntable.bg.innerHTML = '';
+        turntable.gift.innerHTML = '';
+        turntable.init();
+        
+        document.getElementById('lottery').scrollIntoView();
+      }
     </script>
   </body>
 </html>
