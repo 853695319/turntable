@@ -223,6 +223,8 @@
     <script> 
       // 单例模式，转盘唯一，用对象字面量方式表示
       let turntable = {
+        isEqualRate: true, // 是，忽略 lottery item 的 rate 属性，相同概率抽奖
+
         itemNum: 6, // 转盘平均分几块
         
         lightNum: 18, // 转盘上的灯
@@ -313,11 +315,20 @@
 
           // 设置中奖数据的概率范围
           let num = 0
-          this.lottery.forEach(item => {
-            item.min = num;
-            num += item.rate;
-            item.max = num;
-          })
+          if (this.isEqualRate) {
+            let incr = 100 / this.lottery.length;
+            this.lottery.forEach(item => {
+              item.min = num;
+              num += incr;
+              item.max = num;
+            })
+          } else {
+            this.lottery.forEach(item => {
+              item.min = num;
+              num += item.rate;
+              item.max = num;
+            })
+          }
 
           let randomRate;
           let res;
@@ -329,6 +340,7 @@
             res = this.lottery.filter(item => {
               return randomRate >= item.min && randomRate < item.max;
             })[0];
+            if (!res) continue;
 
             // 如果这个奖品没抽到过，那就是他啦
             if (res.isGot !== 1) {
