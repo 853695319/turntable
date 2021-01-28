@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>简单转盘</title>
+    <title>丰天豫抽奖</title>
     <style>
       .flex-center {
         display: flex;
@@ -246,6 +246,7 @@
         <button type="button" class="btn btn-default" onclick="switchPrize('四等奖')">四等奖</button>
         <button type="button" class="btn btn-default" onclick="switchPrize('三等奖')">三等奖</button>
         <button type="button" class="btn btn-default" onclick="switchPrize('二等奖')">二等奖</button>
+        <button type="button" class="btn btn-default" onclick="switchPrize('一等奖')">一等奖</button>
       </div>
       <!-- 抽奖转盘 -->
       <div class="flex-center">
@@ -487,13 +488,22 @@
 
       function switchPrize(prizeName)
       {
-        turntable.lottery = prize[prizeName];
-        turntable.turntable.style = null;
+        let elemLottery = document.getElementById('lottery');
         turntable.bg.innerHTML = '';
         turntable.gift.innerHTML = '';
-        turntable.init();
-        
-        document.getElementById('lottery').scrollIntoView();
+        if (prizeName == '一等奖') {
+          turntable.bg.style.transform = 'rotate(0deg)';
+          turntable.bg.style.backgroundImage = 'url("./static/1.jpg")';
+          turntable.bg.style.backgroundSize = 'contain';
+          turntable.pointer.style.display = 'none';
+        } else {
+          turntable.bg.style.background = '';
+          turntable.pointer.style.display = 'block';
+          turntable.lottery = prize[prizeName];
+          turntable.turntable.style = null;
+          turntable.init();
+        }
+        elemLottery.scrollIntoView();
       }
     </script>
   </body>
