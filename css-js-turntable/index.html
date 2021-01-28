@@ -113,7 +113,7 @@
         background: #fff;
         border: 1px solid #dfd8be;
         border-radius: 50%;
-        transform: rotate(90deg);
+        /* transform: rotate(90deg); */
       }
       .turntable-wrap .turntable .bg li {
         position: absolute;
@@ -267,7 +267,7 @@
           for (let i = 0; i < this.itemNum; i++) {
             let bgItem = document.createElement('li');
             let deg = (360 / this.itemNum) * i
-            bgItem.style.transform = `rotate(${deg}deg)`;
+            bgItem.style.transform = `rotate(${deg}deg) translateY(-150px)`;
             bgFragment.appendChild(bgItem);
 
             let giftItem = document.createElement('li');
@@ -283,6 +283,7 @@
             giftItem.appendChild(span);
             giftFragment.appendChild(giftItem)
           }
+          this.bg.style.transform = `rotate(${360 / this.itemNum / 2}deg)`;
           this.bg.appendChild(bgFragment);
           this.gift.appendChild(giftFragment);
 
@@ -338,7 +339,6 @@
           
           // 2. 计算旋转角度, 需要多转5圈，达转1圈用时1s, 到旋转的效果
           let rotateItemDeg = 360 - (res.location - 1) * (360 / this.lottery.length); // 每个item旋转角度, 第一个不用旋转
-          console.log('rotateItemDeg', rotateItemDeg);
           let rotate = rotateItemDeg + 5 * 360;
           let rotateSpeed = (rotateItemDeg / 360 * 1 + 5).toFixed(2);
           // 重置转盘样式
@@ -375,7 +375,7 @@
         { location: 3, type: 2, rate: 10, img: './static/16.jpg', name: 'TOM尤克里里', },
         { location: 4, type: 2, rate: 20, img: './static/15.jpg', name: '梵高颈椎按摩', },
         { location: 5, type: 2, rate: 10, img: './static/14.jpg', name: '梵高腰部按摩器', },
-        { location: 6, type: 2, rate: 10, img: './static/13.jpg', name: '罗技（Logitech）K845 游戏机械键盘', }
+        { location: 6, type: 2,  img: './static/13.jpg', name: '罗技（Logitech）K845 游戏机械键盘', }
       ];
 
       turntable.turntable = document.querySelector('#turntable');
