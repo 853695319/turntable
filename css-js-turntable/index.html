@@ -4,6 +4,11 @@
     <meta charset="utf-8"/>
     <title>简单转盘</title>
     <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       * {
         margin: 0;
         padding: 0;
@@ -143,7 +148,7 @@
         right: 0;
         bottom: 0;
         display: block;
-        width: 50px;
+        width: 66px;
         height: 70px;
         margin: auto;
         background: yellow;
@@ -243,6 +248,7 @@
             this.pointer.style.display = 'none';
             throw new Error('请设置中奖结果数据');
           }
+          this.itemNum = this.lottery.length;
 
           // 初始化灯
           let lightFragment = document.createDocumentFragment();
@@ -268,7 +274,12 @@
             giftItem.style.transform = `rotate(${deg}deg)`;
             giftItem.className = this.typeClassMap[this.lottery[i].type];
             let span = document.createElement('span');
-            span.innerHTML = this.typeMap[this.lottery[i].type];
+            let img = document.createElement('img');
+            img.src = this.lottery[i].img;
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            // span.innerHTML = this.typeMap[this.lottery[i].type];
+            span.appendChild(img);
             giftItem.appendChild(span);
             giftFragment.appendChild(giftItem)
           }
@@ -283,11 +294,22 @@
           if (this.isGoing) {
             return
           }
+
+          let isEnd = true;
+          for(let i=0; i < this.itemNum; i++) {
+              if (this.lottery[i].isGot !== 1) {
+                isEnd = false;
+              }
+          }
+          if (isEnd) {
+            console.log('全部奖品已抽取完毕');
+            return;
+          }
+          
+          // 检查是否有奖品还没有抽取
+
           this.isGoing = true;
 
-          // 1. 随机中奖结果
-          // 从1-100之间得到一个随机数，看这个随机数在中奖设置的范围，得到最终中奖的项
-          let randomRate = ~~(Math.random() * 100) // ~~ == Math.floor()
           // 设置中奖数据的概率范围
           let num = 0
           this.lottery.forEach(item => {
@@ -295,14 +317,28 @@
             num += item.rate;
             item.max = num;
           })
-          // 根据随机数，得到中奖结果
-          let res = this.lottery.filter(item => {
-            return randomRate >= item.min && randomRate < item.max;
-          })[0];
-          // 这儿可以根据实际情况，可重置中奖结果
+
+          let randomRate;
+          let res;
+          while (true) {
+            // 1. 随机中奖结果
+            // 从1-100之间得到一个随机数，看这个随机数在中奖设置的范围，得到最终中奖的项
+            randomRate = ~~(Math.random() * 100) // ~~ == Math.floor()
+            // 根据随机数，得到中奖结果
+            res = this.lottery.filter(item => {
+              return randomRate >= item.min && randomRate < item.max;
+            })[0];
+
+            // 如果这个奖品没抽到过，那就是他啦
+            if (res.isGot !== 1) {
+              res.isGot = 1;
+              break;
+            }
+          }
           
           // 2. 计算旋转角度, 需要多转5圈，达转1圈用时1s, 到旋转的效果
-          let rotateItemDeg = (res.location - 1) * (360 / this.lottery.length); // 每个item旋转角度, 第一个不用旋转
+          let rotateItemDeg = 360 - (res.location - 1) * (360 / this.lottery.length); // 每个item旋转角度, 第一个不用旋转
+          console.log('rotateItemDeg', rotateItemDeg);
           let rotate = rotateItemDeg + 5 * 360;
           let rotateSpeed = (rotateItemDeg / 360 * 1 + 5).toFixed(2);
           // 重置转盘样式
@@ -324,18 +360,22 @@
       let lottery = [
         {
           location: 1, // 位置
-          type: 1, // 中奖
+          type: 2, // 中奖
           rate: 30,
+          img: './static/18.jpg',
+          name: '格力取暖机',
         },
         { 
           location: 2,
           type: 2, // 未中奖
-          rate: 20
+          rate: 20,
+          img: './static/17.jpg',
+          name: '布加迪威',
         },
-        { location: 3, type: 1, rate: 10 },
-        { location: 4, type: 2, rate: 20 },
-        { location: 5, type: 1, rate: 10 },
-        { location: 6, type: 2, rate: 10 }
+        { location: 3, type: 2, rate: 10, img: './static/16.jpg', name: 'TOM尤克里里', },
+        { location: 4, type: 2, rate: 20, img: './static/15.jpg', name: '梵高颈椎按摩', },
+        { location: 5, type: 2, rate: 10, img: './static/14.jpg', name: '梵高腰部按摩器', },
+        { location: 6, type: 2, rate: 10, img: './static/13.jpg', name: '罗技（Logitech）K845 游戏机械键盘', }
       ];
 
       turntable.turntable = document.querySelector('#turntable');
